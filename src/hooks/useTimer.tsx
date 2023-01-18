@@ -1,29 +1,31 @@
 import { useEffect, useState } from "react";
 
-export function useTimer() {
-  const [elapsedSeconds, setElapsedSeconds] = useState(342);
+// Timer works but the user of the hook is responsible for passing in the
+// startingSeconds which are used to resume the timer after it has been
+// paused. Maybe this could be moved into some global kind of state but
+// that might be unecessary.
+
+export function useTimer(startingSeconds = 0) {
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [startingTime, setStartingTime] = useState(Date.now());
+  const [isPaused, setIsPaused] = useState(false);
+
+  const pause = () => setIsPaused(true);
+  const resume = () => {
+    setIsPaused(false);
+    setStartingTime(Date.now());
+  };
 
   useEffect(() => {
-    let lastUpdate = new Date();
+    if (!isPaused) {
+      const timerId = setInterval(() => {
+        const now = Date.now();
+        const diff = Math.floor((now - startingTime) / 1000) + startingSeconds;
+        setElapsedSeconds(diff);
+      }, 500);
+      return () => clearInterval(timerId);
+    }
+  }, [elapsedSeconds, startingSeconds, isPaused]);
 
-    const timerId = setInterval(() => {
-      const now = new Date();
-      let diff = now.getSeconds() - lastUpdate.getSeconds();
-
-      // when the seconds roll back to 0, we will get a negative difference which we don't want.
-      // It will be 0 - 59, not 60 - 59.
-      if (diff < 0) {
-        diff = 1; //
-      }
-
-      if (diff >= 1) {
-        setElapsedSeconds((s) => s + diff);
-      }
-    }, 500);
-    return () => {
-      clearInterval(timerId);
-    };
-  }, [elapsedSeconds]);
-
-  return elapsedSeconds;
+  return { elapsedSeconds, pause, resume };
 }

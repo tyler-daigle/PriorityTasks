@@ -1,34 +1,56 @@
 import { useEffect, useState } from "react";
-import { useTimer } from "../hooks/useTimer";
+import { TimeKeeper } from "../utils/TimeKeeper";
+
+const Timers = new TimeKeeper();
 
 const padTime = (time: number): string =>
   time < 10 ? `0${time}` : time.toString();
 
+const secondsToString = (seconds: number): string => {
+  let remaining = seconds;
+  const hours = Math.floor(seconds / (60 * 60));
+
+  remaining = remaining % (60 * 60);
+  const minutes = Math.floor(remaining / 60);
+
+  seconds = remaining % 60;
+  return `${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`;
+};
+
 export default function Timer() {
-  const [pausedSeconds, setPausedSeconds] = useState(10);
-  let { elapsedSeconds, pause, resume } = useTimer(pausedSeconds);
-  const hours = Math.floor(elapsedSeconds / (60 * 60));
+  const [timerId, setTimerId] = useState<string | null>();
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  elapsedSeconds = elapsedSeconds % (60 * 60);
-  const minutes = Math.floor(elapsedSeconds / 60);
+  useEffect(() => {
+    const id = Timers.createTimer((numSeconds) => {
+      setElapsedSeconds(numSeconds);
+    }, 4240);
+    setTimerId(id);
 
-  elapsedSeconds = elapsedSeconds % 60;
-  const seconds = elapsedSeconds;
+    return () => {
+      Timers.removeTimer(id);
+      setTimerId(null);
+    };
+  }, []);
 
-  const pauseTimer = () => {
-    pause();
-    setPausedSeconds(elapsedSeconds);
+  const pause = () => {
+    if (timerId) {
+      if (Timers.isTimerRunning(timerId)) {
+        Timers.pauseTimer(timerId);
+        setIsPaused(true);
+      } else {
+        Timers.resumeTimer(timerId);
+        setIsPaused(false);
+      }
+    }
   };
-
-  const resumeTimer = () => resume();
-
   return (
     <div>
-      <button onClick={pauseTimer}>Pause</button>
-      <button onClick={resumeTimer}>Resume</button>
-      <h1>Here is the time:</h1>
-      <span>{padTime(hours)}</span>:<span>{padTime(minutes)}</span>:
-      <span>{padTime(seconds)}</span>
+      <button type="button" onClick={pause}>
+        Pause
+      </button>
+      <div>{secondsToString(elapsedSeconds)}</div>
     </div>
   );
 }

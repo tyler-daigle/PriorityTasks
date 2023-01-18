@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 // paused. Maybe this could be moved into some global kind of state but
 // that might be unecessary.
 
+// TODO: Try jotai for managing the times.
+
 export function useTimer(startingSeconds = 0) {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [startingTime, setStartingTime] = useState(Date.now());

@@ -48,7 +48,7 @@ export default function Timer() {
   return (
     <div>
       <button type="button" onClick={pause}>
-        Pause
+        {isPaused ? "Resume" : "Pause"}
       </button>
       <div>{secondsToString(elapsedSeconds)}</div>
     </div>

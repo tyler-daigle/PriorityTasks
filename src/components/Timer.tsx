@@ -53,7 +53,7 @@ export default function Timer({ startingSeconds = 0, doneHandler }: Props) {
 
   const taskFinished = () => {
     if (timerId) {
-      doneHandler(elapsedSeconds);
+      doneHandler(elapsedSeconds - startingSeconds);
       Timers.pauseTimer(timerId);
     }
   };

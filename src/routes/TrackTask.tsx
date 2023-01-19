@@ -1,12 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useStorage } from "../hooks/useStorage";
 import Timer from "../components/Timer";
+import { Task } from "../data/types";
 // TrackTask is the main page that shows the timer and allows the user to
 // start a break of finish the task.
 
 export default function TrackTask() {
-  const { taskId } = useParams();
-  const { taskList, isLoading } = useStorage();
+  const { taskId } = useParams<string>();
+  const { taskList, isLoading, updateTask } = useStorage();
+  const navigate = useNavigate();
 
   const currentTask = taskList.find((task) => task.taskId === taskId);
 
@@ -25,6 +27,8 @@ export default function TrackTask() {
 
   const finishedTask = (seconds: number) => {
     console.log(`Tasked finished with ${seconds} seconds`);
+    updateTask(taskId!, seconds);
+    navigate("/");
     // TODO: add the amount worked to the workedList
   };
 

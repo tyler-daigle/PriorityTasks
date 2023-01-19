@@ -53,8 +53,16 @@ export function useStorage() {
     setTaskList(testData.map((data) => data));
   }, []);
 
-  const updateTask = (task: Task): Task => {
-    console.log("Updating:", task);
+  const updateTask = (taskId: string, secondsWorked: number): Task | undefined => {
+    const updatedTasks = [...taskList];
+    const task: Task | undefined = updatedTasks.find(t => taskId === t.taskId);
+
+    if (task) {
+      task.workedList.push({ date: new Date(), amountOfTime: secondsWorked });
+      setTaskList(updatedTasks);
+    }
+
+    console.log("Updating:", taskId);
     return task;
   };
 

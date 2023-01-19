@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     errorElement: <Error404 />,
   },
   {
-    path: "/dotask/:taskId",
+    path: "/tracktask/:taskId",
     element: <TrackTask />,
   },
 ]);

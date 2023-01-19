@@ -7,7 +7,11 @@ const testData: Task[] = [
     taskName: "Test Task 1",
     taskId: uuidv4(),
     startDate: new Date(),
-    workedList: [{ date: new Date(), amountOfTime: 500 }],
+    workedList: [
+      { date: new Date(), amountOfTime: 500 },
+      { date: new Date(), amountOfTime: 351 },
+      { date: new Date(), amountOfTime: 543 },
+    ],
     priority: Priority.LEVEL_3,
   },
   {
@@ -49,8 +53,9 @@ export function useStorage() {
     setTaskList(testData.map((data) => data));
   }, []);
 
-  const updateTask = (task: Task) => {
+  const updateTask = (task: Task): Task => {
     console.log("Updating:", task);
+    return task;
   };
 
   const deleteTask = (task: Task) => {

@@ -9,7 +9,7 @@ export default function TaskItem({ task }: Props) {
   return (
     <li>
       <h2>{task.taskName}</h2>
-      <Link to={`/dotask/${task.taskId}`}>Work on task</Link>
+      <Link to={`/tracktask/${task.taskId}`}>Work on task</Link>
     </li>
   );
 }

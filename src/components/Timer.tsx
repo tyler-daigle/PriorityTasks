@@ -17,7 +17,12 @@ const secondsToString = (seconds: number): string => {
   return `${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`;
 };
 
-export default function Timer() {
+interface Props {
+  startingSeconds: number;
+  doneHandler: (seconds: number) => void;
+}
+
+export default function Timer({ startingSeconds = 0, doneHandler }: Props) {
   const [timerId, setTimerId] = useState<string | null>();
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -25,7 +30,7 @@ export default function Timer() {
   useEffect(() => {
     const id = Timers.createTimer((numSeconds) => {
       setElapsedSeconds(numSeconds);
-    }, 4240);
+    }, startingSeconds);
     setTimerId(id);
 
     return () => {
@@ -45,10 +50,21 @@ export default function Timer() {
       }
     }
   };
+
+  const taskFinished = () => {
+    if (timerId) {
+      doneHandler(elapsedSeconds);
+      Timers.pauseTimer(timerId);
+    }
+  };
+
   return (
     <div>
       <button type="button" onClick={pause}>
         {isPaused ? "Resume" : "Pause"}
+      </button>
+      <button type="button" onClick={taskFinished}>
+        Done
       </button>
       <div>{secondsToString(elapsedSeconds)}</div>
     </div>

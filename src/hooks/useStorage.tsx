@@ -48,14 +48,24 @@ export function useStorage() {
   const [isLoading, setIsLoading] = useState(false);
   const [taskList, setTaskList] = useState<Task[]>([]);
 
+  // TODO: Add the tasks to the local storage so that the tasks will
+  // persist when changing to a different page. Right now the useeffect
+  // gets reloaded on a page load and the data is not saved.
+
   useEffect(() => {
+    console.log("Running useStorage() useEffect()");
     // load the task list from the local storage
     setTaskList(testData.map((data) => data));
   }, []);
 
-  const updateTask = (taskId: string, secondsWorked: number): Task | undefined => {
+  const updateTask = (
+    taskId: string,
+    secondsWorked: number
+  ): Task | undefined => {
     const updatedTasks = [...taskList];
-    const task: Task | undefined = updatedTasks.find(t => taskId === t.taskId);
+    const task: Task | undefined = updatedTasks.find(
+      (t) => taskId === t.taskId
+    );
 
     if (task) {
       task.workedList.push({ date: new Date(), amountOfTime: secondsWorked });
@@ -70,5 +80,18 @@ export function useStorage() {
     console.log("Deleting task:", task);
   };
 
-  return { updateTask, deleteTask, taskList, isLoading };
+  const addTask = (taskName: string) => {
+    const t: Task = {
+      taskId: uuidv4(),
+      taskName,
+      startDate: new Date(),
+      workedList: [],
+      priority: Priority.LEVEL_2,
+    };
+    const list = [...taskList];
+    list.unshift(t);
+    setTaskList(list);
+  };
+
+  return { addTask, updateTask, deleteTask, taskList, isLoading };
 }

@@ -6,12 +6,13 @@ import TaskList from "../components/TaskList";
 import Button from "../components/ui/Button";
 
 export default function Home() {
-  const { updateTask, deleteTask, taskList } = useStorage();
+  const { addTask, updateTask, deleteTask, taskList } = useStorage();
   const [newTaskName, setNewTaskName] = useState("");
 
   const addNewTaskHandler = () => {
     console.log("Adding task: ", newTaskName);
     setNewTaskName("");
+    addTask(newTaskName);
   };
 
   useEffect(() => {}, [taskList]);

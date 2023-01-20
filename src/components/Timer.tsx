@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { TimeKeeper } from "../utils/TimeKeeper";
+import LargeButton from "./ui/LargeButton";
 
 const Timers = new TimeKeeper();
 
@@ -24,7 +25,7 @@ interface Props {
 
 export default function Timer({ startingSeconds = 0, doneHandler }: Props) {
   const [timerId, setTimerId] = useState<string | null>();
-  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(startingSeconds);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
@@ -32,6 +33,9 @@ export default function Timer({ startingSeconds = 0, doneHandler }: Props) {
       setElapsedSeconds(numSeconds);
     }, startingSeconds);
     setTimerId(id);
+
+    Timers.pauseTimer(id); //start timer paused
+    setIsPaused(true);
 
     return () => {
       Timers.removeTimer(id);
@@ -60,13 +64,18 @@ export default function Timer({ startingSeconds = 0, doneHandler }: Props) {
 
   return (
     <div>
-      <button type="button" onClick={pause}>
-        {isPaused ? "Resume" : "Pause"}
-      </button>
-      <button type="button" onClick={taskFinished}>
-        Done
-      </button>
-      <div>{secondsToString(elapsedSeconds)}</div>
+      <div className="text-7xl font-mono text-center my-8">
+        {secondsToString(elapsedSeconds)}
+      </div>
+
+      <div className="flex justify-evenly">
+        <LargeButton type="button" onClick={pause}>
+          {isPaused ? "Resume" : "Pause"}
+        </LargeButton>
+        <LargeButton type="button" onClick={taskFinished}>
+          Done
+        </LargeButton>
+      </div>
     </div>
   );
 }

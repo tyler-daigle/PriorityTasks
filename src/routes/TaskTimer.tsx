@@ -34,10 +34,8 @@ export default function TaskTimerPage() {
   };
 
   return (
-    <div>
-      <h1>Track Your Task</h1>
-      <h2>{currentTask.taskName}</h2>
-      <p>{taskId}</p>
+    <div className="bg-gray-200 p-4 my-4 flex flex-col shadow-md rounded-md">
+      <h1 className="text-4xl text-center">{currentTask.taskName}</h1>
       <Timer startingSeconds={totalSecondsWorked} doneHandler={finishedTask} />
     </div>
   );

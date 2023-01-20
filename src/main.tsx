@@ -4,7 +4,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Error404 from "./routes/Error404";
 import Home from "./routes/Home";
-import TrackTask from "./routes/TrackTask";
+import TaskTimerPage from "./routes/TaskTimer";
+import Layout from "./components/ui/Layout";
 
 const router = createBrowserRouter([
   {
@@ -14,12 +15,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/tracktask/:taskId",
-    element: <TrackTask />,
+    element: <TaskTimerPage />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Layout>
+      <RouterProvider router={router} />
+    </Layout>
   </React.StrictMode>
 );

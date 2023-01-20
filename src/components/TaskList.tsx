@@ -7,7 +7,7 @@ interface Props {
 
 export default function TaskList({ taskList }: Props) {
   return (
-    <ul>
+    <ul className="flex flex-col gap-2">
       {taskList.map((task) => (
         <TaskItem key={task.taskId} task={task} />
       ))}

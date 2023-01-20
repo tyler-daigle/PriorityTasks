@@ -2,10 +2,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useStorage } from "../hooks/useStorage";
 import Timer from "../components/Timer";
 import { Task } from "../data/types";
-// TrackTask is the main page that shows the timer and allows the user to
+
+// TaskTimerPage is the main page that shows the timer and allows the user to
 // start a break of finish the task.
 
-export default function TrackTask() {
+export default function TaskTimerPage() {
   const { taskId } = useParams<string>();
   const { taskList, isLoading, updateTask } = useStorage();
   const navigate = useNavigate();

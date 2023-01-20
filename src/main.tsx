@@ -6,6 +6,7 @@ import Error404 from "./routes/Error404";
 import Home from "./routes/Home";
 import TaskTimerPage from "./routes/TaskTimer";
 import Layout from "./components/ui/Layout";
+import AddTaskPage from "./routes/AddTask";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/tracktask/:taskId",
     element: <TaskTimerPage />,
+  },
+  {
+    path: "/addtask",
+    element: <AddTaskPage />,
   },
 ]);
 
